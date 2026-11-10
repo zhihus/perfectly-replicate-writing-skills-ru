@@ -2,7 +2,7 @@
 
 > **Clone any author's writing style** by deeply analyzing their content across 7+1 dimensions.
 
-An open-source rebuild of the writing-style cloning skill spec published by JinDaGe on jindage.com.
+A **Russian-language adaptation** of the [Perfectly Replicate Writing Skills](https://github.com/zrh091110225/perfectly-replicate-writing-skills) skill, originally created by [JinDaGe](https://jindage.com). This repository is a separate, independently maintained skill — it adapts the original framework to Russian (manual lemmatization, Russian stop words, word-based thresholds, 1С business-spec style markers) and is not a mirror of the original.
 
 ## Overview
 
@@ -75,7 +75,7 @@ perfectly-replicate-writing-skills-ru/
 
 ```bash
 # Clone the project
-git clone https://github.com/zrh091110225/perfectly-replicate-writing-skills.git
+git clone https://github.com/zhihus/perfectly-replicate-writing-skills-ru.git
 cd perfectly-replicate-writing-skills-ru
 
 # Install the skill
@@ -112,5 +112,6 @@ MIT License
 
 ## Credits
 
-- Framework design inspired by [JinDaGe](https://jindage.com)'s [Perfectly Replicate Writing Skills](https://jindage.com/en/skills/perfectly-replicate-writing-skills) on the skill marketplace
-- This version is rebuilt from the public spec description; original rights belong to the author
+This project is a Russian-language adaptation of [Perfectly Replicate Writing Skills](https://github.com/zrh091110225/perfectly-replicate-writing-skills), created by [JinDaGe](https://jindage.com). Thanks to the original author for the framework design and the public spec on the [skill marketplace](https://jindage.com/en/skills/perfectly-replicate-writing-skills).
+
+This repository is a **separate, independently maintained skill**: it adapts the framework to Russian (manual lemmatization, Russian stop words, word-based thresholds, 1С business-spec style markers) and is not a mirror of the original. Original rights belong to the original author.
