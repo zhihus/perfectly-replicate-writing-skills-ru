@@ -1,3 +1,6 @@
 # Session artifacts (commit-rules 2.3: not committed)
 .audit/
 .zcode/
+
+# Temporary scratch folder (self-cleans daily, see Agent.md)
+temp/
