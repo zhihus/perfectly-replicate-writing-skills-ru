@@ -48,7 +48,9 @@ Accept input via: direct paste, file paths, or conversation context.
 
 ### Process
 1. Deduplicate — remove near-duplicate content (cosine similarity >0.85 on first 200 chars)
-2. Clean — strip boilerplate, site headers/footers, publication metadata
+2. Clean — strip only true noise: page numbers, running headers/footers, file metadata, and OCR garbage from embedded screenshots (UI labels, window chrome, tooltips). **Document-template elements are structural signals, not noise — preserve them:** title page, «ЗАКАЗЧИК/ИСПОЛНИТЕЛЬ» blocks, table of contents, «УТВЕРЖДАЮ» blocks, and figure captions «(Рисунок - N)» (hyphen with spaces — a style marker; never normalize to em dash).
+   - **Tables** (glossary, access rights, test order): when extraction breaks a table into a jumbled word stream, reconstruct it as logical «Header: Value» pairs before analysis — table structure is itself a style signal (enumeration discipline, parallelism).
+   - **Template ≠ duplicate:** repeated formal blocks (glossary, abbreviation lists, standard clauses) are part of the author's template discipline — keep them. Deduplication (step 1) removes only accidental copy-pasted paragraphs, never formal sections.
 3. Count corpus stats — N articles, total chars/words, per-article breakdown, avg length
 4. Collect metadata — ask user for: author name, platform, genre (if not provided)
 
