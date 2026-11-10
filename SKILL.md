@@ -14,6 +14,7 @@ Trigger on requests for:
 - style analysis of provided articles or content
 - building a reusable writing persona from samples
 - "make my writing sound more like [person]"
+- **Mode C trigger**: "generate a ТЗ / document from an OpenSpec `spec.md`, using Style Card [X]" — content-driven generation from a ready spec (see Phase 0 → Content-Driven Input and Phase 3 → Mode C)
 
 ## Core Principles
 
@@ -62,6 +63,16 @@ Accept input via: direct paste, file paths, or conversation context.
 
 ### Updating Existing Clone
 If a persona sub-skill already exists for this author, read the existing `SKILL.md`, do a delta-analysis on new articles only, and incrementally update rather than rebuilding from scratch.
+
+### Content-Driven Input (OpenSpec `spec.md`) — Mode C entry
+A different input type exists: instead of a corpus of author samples, the user provides an **OpenSpec `spec.md`** (the content brief) **plus a ready Style Card**. This is the entry point for **Mode C (Content-Driven Generation)** — see Phase 3.
+
+- **Recognition:** if the input is a `spec.md` (or an OpenSpec change folder) together with a Style Card, do **not** run the sample-analysis pipeline (Phases 0–2). The Style Card is already built; skip straight to generation (Phase 3 Mode C + Phase 4 Blind Test).
+- **Context management (CRITICAL):** an OpenSpec `spec.md` can be large. If it **exceeds 4,000 characters** or contains **multiple Capabilities**, do **not** feed the whole spec at once — the compact Style Card will be "drowned out" and the style will drift. Instead:
+  1. Split the spec by **Capability** (or by `### Requirement:` group) and generate the ТЗ **one section at a time**.
+  2. Keep the **Style Card in context on every pass** — it is small (a few thousand words) and always fits; re-anchor it before each section.
+  3. Assemble the sections into a single ТЗ only after all sections are generated, preserving the author's structure markers (numbering, «УТВЕРЖДАЮ», «Рисунок - N»).
+- **Language:** OpenSpec artifacts are often in English. Translate the **facts** into the author's language (Russian for a 1С business-ТЗ author), **preserving technical terms unchanged** (ТМЦ, СиМ, ТСД, АРМ, УЛ, ФР, FEFO, ZPL) and applying the style markers from the Style Card. See Phase 3 → Mode C.
 
 ---
 
@@ -141,6 +152,27 @@ An installable Claude Code skill at `~/.claude/skills/[author-name]-style/SKILL.
 
 After creating, tell the user it's installed and how to invoke it.
 
+### Mode C — Content-Driven Generation (OpenSpec `spec.md` + Style Card → ТЗ)
+
+A third output mode, used when the user provides a ready **OpenSpec `spec.md`** plus a **Style Card** instead of a sample corpus. This is the integration point with the OpenSpec framework.
+
+**Instruction:** if the user feeds an OpenSpec `spec.md` (or an OpenSpec change folder) together with a Style Card, **do not analyze new samples** — the Style Card already exists. Go **straight to generation**: use the `spec.md` as the **source of facts** (what must be in the document) and the Style Card as the **stylistic filter** (how it must read).
+
+**How to generate:**
+1. Read `spec.md` as the **content brief**. Map its elements to the 1С business-ТЗ structure using the rules in `references/openspec-mapping.md`:
+   - `Requirement` → a ТЗ section (e.g. «Бизнес-логика», «Функциональные требования»).
+   - `Scenario (WHEN/THEN)` → a row in the testing table («Действие» / «Ожидаемый результат»).
+   - `design.md` (Risks / Trade-offs) → the «Ограничения и допущения» section.
+   - `proposal.md` (Why / What Changes) → the introduction / purpose of the ТЗ.
+2. Apply the Style Card as the filter: lexicon, tone, punctuation fingerprint, writing genes, disallowed list. **Do not invent or alter facts** — only translate them into the ТЗ format and dress them in the author's style.
+3. **Language rule (CRITICAL):** OpenSpec artifacts may be in English. Translate the **facts into Russian** (the author's language), **preserving technical terms unchanged** (ТМЦ, СиМ, ТСД, АРМ, УЛ, ФР, FEFO, ZPL) and applying the style markers from the Style Card. Never re-interpret the logic of WHEN/THEN — translate, don't re-think.
+4. **Section-by-section** for large specs (see Phase 0 → Content-Driven Input): generate one Capability/Requirement group at a time, keeping the Style Card in context on every pass.
+5. **No choppy robot.** When generating the text, avoid artificial fragmentation. If two adjacent sentences are shorter than 8 words, merge them into one compound sentence (8–15 words) using the conjunctions «и», «после чего», «при этом». Do not turn the text into a telegraphic style.
+
+**Dual validation (before finalizing):**
+- **(A) Spec compliance** — every `Requirement` and `Scenario` from `spec.md` is covered by a ТЗ section / table row. Nothing added, nothing dropped.
+- **(B) Style compliance** — run the Phase 4 Blind Test on a generated fragment; composite match must be **≥70%** against the source corpus. If either (A) or (B) fails, flag the discrepancy and regenerate the affected section.
+
 ---
 
 ## Phase 4: Blind Test
@@ -185,3 +217,4 @@ User's own writing. Frame identity as "you are the author" — help surface unco
 - `references/7-dimensions-framework.md` — Detailed measurement framework for all 7+1 dimensions
 - `references/writing-formulas.md` — 14 writing formulas with descriptions and when to use each
 - `references/persona-template.md` — Template for generating the persona sub-skill
+- `references/openspec-mapping.md` — Mapping rules: OpenSpec artifacts (`spec.md`, `design.md`, `proposal.md`) → 1С business-ТЗ structure (Mode C)
