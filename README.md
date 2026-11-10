@@ -57,7 +57,8 @@ The skill's instructions are written in English (token-efficient), but the **out
 ```
 perfectly-replicate-writing-skills-ru/
 ├── SKILL.md                              # Main skill definition (Claude Code SKILL.md)
-├── README.md                             # This file
+├── README.md                             # This file (English)
+├── README.ru.md                          # Russian version of this file
 ├── LICENSE                               # MIT License
 ├── references/
 │   ├── 7-dimensions-framework.md         # 7+1 dimension analysis framework details
