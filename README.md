@@ -1,113 +1,116 @@
-# 完美复刻蒸馏写作技能 (Perfect Replicate Distillation Writing Skill)
+# Perfect Replicate Distillation Writing Skill
 
 > **Clone any author's writing style** by deeply analyzing their content across 7+1 dimensions.
 
-基于 JinDaGe（金大哥）在 jindage.com 上发布的写作风格克隆技能规格重建的开源版本。
+An open-source rebuild of the writing-style cloning skill spec published by JinDaGe on jindage.com.
 
-## 概述
+## Overview
 
-这个技能接收 3 篇以上的作者文章，通过 4 个阶段的深度分析，输出两样东西：
+This skill takes 3+ documents by an author and, through a 4-phase deep analysis, produces two things:
 
-- **Output A：便携写作风格 Prompt** —— 可用于任何 LLM（Claude、ChatGPT 等）的自包含风格指令
-- **Output B：Persona 子技能** —— 可直接安装到 Claude Code 的人物写作技能
+- **Output A: Portable Writing Style Prompt** — a self-contained style instruction usable with any LLM (Claude, ChatGPT, etc.)
+- **Output B: Persona Sub-Skill** — an installable persona writing skill for Claude Code
 
-## 分析框架：7+1 维度
+The skill's instructions are written in English (token-efficient), but the **output** (style card, persona, style prompt) is generated **in the author's language**. For a Russian-speaking author, all output is in Russian.
 
-| 维度 | 测量内容 | 分析方式 |
-|------|----------|----------|
-| 1. 词汇 (Lexical) | 高频词、指纹词、搭配、词汇丰富度 | 并行 |
-| 2. 句法 (Syntactic) | 平均句长、从句类型比、标点指纹、段落节奏 | 并行 |
-| 3. 语气 (Tonal) | 口语化指数、句长波动、形式度、确定性 | 并行 |
-| 4. 篇章 (Discourse) | 开头/结尾模式、段落节奏、逻辑流 | 串行 |
-| 5. 修辞 (Rhetoric) | 比喻密度、排比、设问、具体/抽象比 | 并行 |
-| 6. 情感 (Emotion) | 极性分布、情感弧线、立场标记 | 并行 |
-| 7. 视角 (Perspective) | 主题簇、人称分布、意象系统、价值词 | 并行 |
-| 8. 格式适配 | 结构惯性、体裁匹配度、公式推荐 | 最后 |
+## Analysis Framework: 7+1 Dimensions
 
-## 4 阶段工作流
+| Dimension | Measured | Analysis Mode |
+|-----------|----------|---------------|
+| 1. Lexical | word frequency, fingerprint words, collocations, lexical richness | parallel |
+| 2. Syntactic | avg sentence length, clause-type ratios, punctuation fingerprint, paragraph rhythm | parallel |
+| 3. Tonal | colloquialism index, sentence-length volatility, formality, certainty | parallel |
+| 4. Discourse | opening/closing patterns, paragraph rhythm, logic flow | sequential |
+| 5. Rhetoric | metaphor density, parallelism, rhetorical questions, concrete/abstract ratio | parallel |
+| 6. Emotion | polarity distribution, emotional arc, stance markers | parallel |
+| 7. Perspective | theme clusters, pronoun distribution, imagery system, value words | parallel |
+| 8. Format Adaptation | structural inertia, genre fit, formula recommendation | last |
 
-### Phase 0：语料摄取
-- 接受 ≥3 篇文章（≥2,000 字/词）
-- 理想 ≥10 篇 / ≥10,000 字
-- 自动去重、清洗、统计
+## 4-Phase Workflow
 
-### Phase 1：7+1 维度分析
-- 对 7 个维度进行系统化测量（并行 + 串行混合）
-- 最后进行格式适配评估
+### Phase 0: Ingestion
+- Accept ≥3 documents (≥2,000 total words)
+- Ideal: ≥10 documents / ≥10,000 total words
+- Automatic deduplication, cleaning, statistics
+- Count volume in **words** for Russian and English; in **characters** only for Chinese
 
-### Phase 2：风格画像合成
-- 每个维度提炼 3-5 条核心结论
-- 跨维度验证提取 3-5 项"写作基因"
-- 生成 5-10 条禁用清单
+### Phase 1: 7+1 Dimension Analysis
+- Systematic measurement of the 7 dimensions (mixed parallel + sequential)
+- Format-adaptation assessment last
 
-### Phase 3：双输出生成
-- **Output A**：便携风格 Prompt
-- **Output B**：Persona 子技能
+### Phase 2: Style Portrait Synthesis
+- Distill 3-5 core conclusions per dimension
+- Cross-dimension validation to extract 3-5 "writing genes"
+- Generate a 5-10 item disallowed list
 
-### Phase 4：盲测
-- 生成 2 篇 200-300 字测试文本
-- 与原作进行 7 维度逐项评分
-- 整体匹配度 >70% 为合格
+### Phase 3: Dual Outputs
+- **Output A**: portable style prompt
+- **Output B**: persona sub-skill
 
-## 项目结构
+### Phase 4: Blind Test
+- Generate 2 test pieces of **500-700 words** (≈3,500-5,000 chars for Russian)
+- Score each against the original across all 7 dimensions
+- Composite match >70% passes (evaluated on the full 500-700 word volume)
+
+## Project Structure
 
 ```
-perfectly-replicate-writing-skills/
-├── SKILL.md                              # 主技能定义（Claude Code SKILL.md）
-├── README.md                             # 本文件
+perfectly-replicate-writing-skills-ru/
+├── SKILL.md                              # Main skill definition (Claude Code SKILL.md)
+├── README.md                             # This file
 ├── LICENSE                               # MIT License
 ├── references/
-│   ├── 7-dimensions-framework.md         # 7+1 维度分析框架详情
-│   ├── writing-formulas.md              # 14 种写作公式参考
-│   └── persona-template.md              # Persona 子技能生成模板
+│   ├── 7-dimensions-framework.md         # 7+1 dimension analysis framework details
+│   ├── writing-formulas.md              # 14 writing formulas reference
+│   └── persona-template.md              # Persona sub-skill generation template
 └── examples/
-    └── 抓马教育-style/                    # 示例输出：抓马教育品牌风格分析
-        ├── SKILL.md                      # 生成的 Persona 子技能
-        └── style-card.md                 # 7+1 维度完整风格卡片
+    └── 抓马教育-style/                    # Example output: 抓马教育 brand style analysis
+        ├── SKILL.md                      # Generated persona sub-skill
+        └── style-card.md                 # Full 7+1 dimension style card
 ```
 
-## 使用方式
+## Usage
 
-### 作为 Claude Code 技能安装
+### Install as a Claude Code skill
 
 ```bash
-# 克隆项目
+# Clone the project
 git clone https://github.com/zrh091110225/perfectly-replicate-writing-skills.git
-cd perfectly-replicate-writing-skills
+cd perfectly-replicate-writing-skills-ru
 
-# 安装技能
-cp -r SKILL.md ~/.claude/skills/perfectly-replicate-writing-skills/
-cp -r references ~/.claude/skills/perfectly-replicate-writing-skills/
+# Install the skill
+cp -r SKILL.md ~/.claude/skills/perfectly-replicate-writing-skills-ru/
+cp -r references ~/.claude/skills/perfectly-replicate-writing-skills-ru/
 ```
 
-然后在 Claude Code 中触发：
+Then trigger in Claude Code:
 
-> "帮我分析这些文章的作者风格"  
-> "克隆这个作家的写作风格"  
-> "用李笑来的风格写一篇关于效率的文章"
+> "Analyze the author's style from these articles"
+> "Clone this writer's writing style"
+> "Write an article about efficiency in the style of [author]"
 
-### 作为独立工具使用
+### Use as a standalone tool
 
-直接按 4 阶段工作流手动执行分析：
-1. 收集 ≥3 篇目标作者的文章
-2. 按 7+1 维度逐一分析
-3. 合成风格画像
-4. 生成风格 Prompt 和 Persona 子技能
+Manually run the 4-phase workflow:
+1. Collect ≥3 documents by the target author
+2. Analyze across the 7+1 dimensions
+3. Synthesize the style portrait
+4. Generate the style prompt and persona sub-skill
 
-## 品味原则
+## Core Principles
 
-1. **反复出现 ≥3 次的才是真特征** —— 一次是即兴，三次才是风格
-2. **保留矛盾** —— 作者不一致的写法不要强行调和
-3. **要具体** —— "平均句长 12 字，30% 的句子少于 8 字" 有用；"喜欢用短句" 没用
-4. **禁用清单比正向特征更重要** —— 从"从不做什么"入手经常更能定义风格边界
-5. **不猜测** —— 不虚构作者背景，不把通用写作建议当作独有风格
-6. **不磨平瑕疵** —— 不自然的表达、怪癖和棱角，恰恰是风格标记
+1. **Features appearing 3+ times are real style signals** — once is improvisation, three is style
+2. **Preserve contradictions** — don't force-smooth inconsistent authorship
+3. **Be specific** — "average sentence length 12 words, 30% of sentences under 8 words" is useful; "likes short sentences" is not
+4. **The disallowed list matters more than positive features** — defining style boundaries by "what the author never does" often works better
+5. **No guessing** — don't invent author background; don't pass general writing advice off as unique style
+6. **Don't smooth imperfections** — awkward phrasings, quirks, and rough edges are identity markers
 
-## 许可
+## License
 
 MIT License
 
-## 致谢
+## Credits
 
-- 框架设计灵感来自 [JinDaGe](https://jindage.com) 在 skill 市场上发布的 [Perfectly Replicate Writing Skills](https://jindage.com/en/skills/perfectly-replicate-writing-skills)
-- 本版本根据公开的规格描述重建，版权归原作者所有
+- Framework design inspired by [JinDaGe](https://jindage.com)'s [Perfectly Replicate Writing Skills](https://jindage.com/en/skills/perfectly-replicate-writing-skills) on the skill marketplace
+- This version is rebuilt from the public spec description; original rights belong to the author

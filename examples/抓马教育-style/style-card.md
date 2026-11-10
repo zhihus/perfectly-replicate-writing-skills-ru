@@ -1,5 +1,7 @@
 # Author Writing Style Card — 抓马教育（Drama Rainbow）
 
+> **Note:** This is a structural example. The language of the output follows the target author's language — this card is in Chinese because the author (抓马教育) writes in Chinese. For a Russian-speaking author (e.g., a 1С business-TZ author), the style card, persona, and style prompt would be generated **in Russian**.
+
 ## 元数据
 
 | 字段 | 值 |

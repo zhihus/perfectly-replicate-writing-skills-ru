@@ -199,9 +199,10 @@ When recommending formulas during Phase 2 analysis:
 | Instructional, teacherly | FAB, PCS, How-To variants | PAS (too salesy) |
 | Persuasive, opinionated | AIDA, PAS, 4Ps, SSS | LATCH, Inverted Pyramid |
 | Poetic, reflective | Narrative Arc, BAB | AIDA, FAB |
+| Technical, terse (1С business TZ style) | PCS, Inverted Pyramid, Listicle | Narrative Arc, 4Ps |
 
 Rate each formula for the author on the 4-point scale:
-- **天生适合** — Born fit. The formula amplifies the author's natural strengths.
-- **可以驾驭** — Can handle. The author's style can adapt to this formula with some adjustment.
-- **不太适合** — Poor fit. Significant style tension; not recommended.
-- **冲突** — Actively clashes. The formula would require the author to write against their nature.
+- **born fit** — The formula amplifies the author's natural strengths.
+- **can handle** — The author's style can adapt to this formula with some adjustment.
+- **poor fit** — Significant style tension; not recommended.
+- **clashes** — Actively clashes. The formula would require the author to write against their nature.
